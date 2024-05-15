@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./proto";
+
+// protoc --go_out=. --go-grpc_out=. proto/product.proto
+
+service ProductService {
+  rpc GetProduct (GetProductRequest) returns (GetProductResponse);
+  rpc ListProducts (ListProductsRequest) returns (ListProductsResponse);
+  rpc StreamProducts (StreamProductsRequest) returns (stream StreamProductsResponse);
+}
+
+message GetProductRequest {
+  int64 id = 1;
+}
+
+message GetProductResponse {
+  Product product = 1;
+}
+
+message ListProductsRequest {}
+
+message ListProductsResponse {
+  repeated Product products = 1;
+}
+
+message StreamProductsRequest {}
+
+message StreamProductsResponse {
+  Product product = 1;
+}
+
+message Product {
+  int64 id = 1;
+  string name = 2;
+  float price = 3;
+}

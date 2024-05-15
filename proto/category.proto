@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./proto";
+
+// protoc --go_out=. --go-grpc_out=. proto/category.proto
+
+service CategoryService {
+  rpc GetCategory (GetCategoryRequest) returns (GetCategoryResponse);
+  rpc ListCategorys (ListCategoryRequest) returns (ListCategoryResponse);
+}
+
+message GetCategoryRequest {
+  int64 id = 1;
+}
+
+message GetCategoryResponse {
+  Category category = 1;
+}
+
+message ListCategoryRequest {}
+
+message ListCategoryResponse {
+  repeated Category cates = 1;
+}
+
+message Category {
+  int64 id = 1;
+  string name = 2;
+}

@@ -1,0 +1,21 @@
+mysql:
+  host: "localhost"
+  port: 3306
+  user: "root"
+  password: "password"
+  dbname: "mydb"
+
+redis:
+  addr: "localhost:6379"
+  password: ""
+  db: 0
+
+kafka:
+  brokers:
+    - "localhost:9092"
+
+elasticsearch:
+  addr: "http://localhost:9200"
+
+
+# 配置文件写入 ETCD：etcdctl put /config/myapp "$(cat config.yaml)"
