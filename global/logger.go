@@ -1,18 +1,18 @@
-package logger
+package global
 
 import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-var GLogger *Logger
+var G_Logger *Logger
 
 func InitLogger() (err error) {
 	logger, err := NewLogger()
 	if err != nil {
 		return err
 	}
-	GLogger = logger
+	G_Logger = logger
 	return
 }
 

@@ -5,9 +5,9 @@ import (
 	"net"
 
 	"go-grpc-skeleton/config"
+	"go-grpc-skeleton/global"
 	"go-grpc-skeleton/internal/handler"
 	"go-grpc-skeleton/internal/pkg/elasticsearch"
-	"go-grpc-skeleton/internal/pkg/logger"
 	"go-grpc-skeleton/internal/pkg/mysql"
 	"go-grpc-skeleton/internal/pkg/redis"
 	repo "go-grpc-skeleton/internal/repository"
@@ -47,7 +47,7 @@ func main() {
 	}
 
 	// 初始化日志记录器
-	if err := logger.InitLogger(); err != nil {
+	if err := global.InitLogger(); err != nil {
 		log.Fatalf("failed to init logger: %v", err)
 	}
 
