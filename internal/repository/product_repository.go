@@ -2,6 +2,7 @@ package repo
 
 import (
 	"go-grpc-skeleton/internal/models"
+	"go-grpc-skeleton/internal/pkg/logger"
 
 	"github.com/elastic/go-elasticsearch/v7"
 	"github.com/go-redis/redis/v8"
@@ -28,6 +29,9 @@ func NewProductRepository(db *gorm.DB, redis *redis.Client, es *elasticsearch.Cl
 }
 
 func (r *ProductRepository) GetProduct(id int64) (*models.Product, error) {
+
+	logger.GLogger.NormalLog.Info("request GetProduct")
+
 	var product models.Product
 	if err := r.db.First(&product, id).Error; err != nil {
 		return nil, err
