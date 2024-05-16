@@ -5,7 +5,6 @@ import (
 	"net"
 
 	"go-grpc-skeleton/config"
-	"go-grpc-skeleton/global"
 	"go-grpc-skeleton/internal/handler"
 	"go-grpc-skeleton/internal/pkg/elasticsearch"
 	"go-grpc-skeleton/internal/pkg/mysql"
@@ -14,6 +13,9 @@ import (
 	"go-grpc-skeleton/internal/service"
 	pb "go-grpc-skeleton/proto"
 
+	"go-grpc-skeleton/global"
+
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
@@ -27,28 +29,27 @@ func main() {
 		log.Fatalf("failed to load config: %v", err)
 	}
 
+	// 初始化日志记录器
+	logger := global.Logger()
+	// sugar := global.Sugar()
+
 	// 初始化 GORM MySQL 客户端
 	db, err := mysql.NewGormClient(cfg.MySQL)
 	if err != nil {
-		log.Fatalf("failed to connect to MySQL: %v", err)
+		logger.Error("Failed to initialize GORM MySQL client", zap.Error(err))
 	}
 
 	// 初始化 Redis 客户端
 	redisClient, err := redis.NewRedisClient(cfg.Redis)
 	if err != nil {
-		log.Fatalf("failed to connect to Redis: %v", err)
+		logger.Error("failed to connect to Redis", zap.Error(err))
 	}
 	defer redisClient.Close()
 
 	// 初始化 Elasticsearch 客户端
 	esClient, err := elasticsearch.NewElasticsearchClient(cfg.Elasticsearch)
 	if err != nil {
-		log.Fatalf("failed to connect to Elasticsearch: %v", err)
-	}
-
-	// 初始化日志记录器
-	if err := global.InitLogger(); err != nil {
-		log.Fatalf("failed to init logger: %v", err)
+		logger.Error("failed to connect to Elasticsearch: ", zap.Error(err))
 	}
 
 	// 初始化 product 模块
@@ -67,11 +68,11 @@ func main() {
 
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		logger.Error("failed to listen: ", zap.Error(err))
 	}
 
-	log.Println("gRPC server is running on port 50051")
+	logger.Info("gRPC server is running on port 50051")
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		logger.Error("failed to serve: ", zap.Error(err))
 	}
 }

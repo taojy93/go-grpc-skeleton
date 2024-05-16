@@ -30,7 +30,7 @@ func NewProductRepository(db *gorm.DB, redis *redis.Client, es *elasticsearch.Cl
 
 func (r *ProductRepository) GetProduct(id int64) (*models.Product, error) {
 
-	global.G_Logger.NormalLog.Info("request GetProduct")
+	global.Logger().Info("request GetProduct")
 
 	var product models.Product
 	if err := r.db.First(&product, id).Error; err != nil {
